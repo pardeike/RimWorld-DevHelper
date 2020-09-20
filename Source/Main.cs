@@ -12,7 +12,6 @@ namespace DevHelper
 		{
 			Settings = GetSettings<DevHelperSettings>();
 			Tools.SetUsefulDefaults();
-			Logging.Init();
 
 			var harmony = new Harmony("net.pardeike.rimworld.mod.devhelper");
 			harmony.PatchAll();
