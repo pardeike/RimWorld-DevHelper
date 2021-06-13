@@ -48,9 +48,9 @@ namespace DevHelper
 
 				game.tickManager.gameStartAbsTick = GenTicks.ConfiguredTicksAbsAtGameStart;
 
-				_ = Ref.parts(Find.Scenario).RemoveAll(part => part is ScenPart_GameStartDialog);
+				_ = Find.Scenario.parts.RemoveAll(part => part is ScenPart_GameStartDialog);
 				var arrivalMethod = Find.Scenario.AllParts.OfType<ScenPart_PlayerPawnsArriveMethod>().First();
-				Ref.method(arrivalMethod) = PlayerPawnsArriveMethod.Standing;
+				arrivalMethod.method = PlayerPawnsArriveMethod.Standing;
 
 				var tile = TileFinder.RandomStartingTile();
 

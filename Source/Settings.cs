@@ -12,6 +12,7 @@ namespace DevHelper
 		public string remoteLoggingHostname = "localhost";
 		public int remoteLoggingPort = 8888;
 		public string lastError;
+		public string fixedSeed = "brrainz";
 
 		string hostname;
 		string port;
@@ -20,11 +21,12 @@ namespace DevHelper
 		{
 			base.ExposeData();
 			Scribe_Collections.Look(ref windowState, "windowState", LookMode.Value, LookMode.Deep);
-			windowState = windowState ?? new Dictionary<Type, WindowInfo>();
+			windowState ??= new Dictionary<Type, WindowInfo>();
 			Scribe_Values.Look(ref remoteLoggingEnabled, "remoteLoggingEnabled", true);
 			Scribe_Values.Look(ref remoteLoggingHostname, "remoteLoggingHostname", "localhost");
 			Scribe_Values.Look(ref remoteLoggingPort, "remoteLoggingPort", 8888);
 			Scribe_Values.Look(ref lastError, "lastError", null);
+			Scribe_Values.Look(ref fixedSeed, "fixedSeed", "brrainz");
 		}
 
 		public static void Label(Listing_Standard list, string text, GameFont font = GameFont.Medium, Color? color = null)
@@ -77,6 +79,10 @@ namespace DevHelper
 				}
 				if (Helper.Settings.lastError != null)
 					Label(list, Helper.Settings.lastError, GameFont.Small, Color.red);
+
+				list.Gap(4);
+				Label(list, "Seed", GameFont.Tiny);
+				fixedSeed = list.TextEntry(fixedSeed);
 			}
 			list.Gap();
 

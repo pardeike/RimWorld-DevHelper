@@ -117,20 +117,20 @@ namespace DevHelper
 					switch (kind)
 					{
 						case WindowKind.Notepad:
-						{
-							var handle = NativeMethods.FindWindowEx(wh.RawPtr, IntPtr.Zero, "EDIT", null);
-							WriteToNotepad(handle, message);
-							processed = true;
-							return true;
-						}
+							{
+								var handle = NativeMethods.FindWindowEx(wh.RawPtr, IntPtr.Zero, "EDIT", null);
+								WriteToNotepad(handle, message);
+								processed = true;
+								return true;
+							}
 						case WindowKind.Notepad2:
 						case WindowKind.NotepadPlusPlus:
-						{
-							var handle = NativeMethods.FindWindowEx(wh.RawPtr, IntPtr.Zero, "Scintilla", null);
-							WriteToNotepadPlusPlus(handle, message);
-							processed = true;
-							return true;
-						}
+							{
+								var handle = NativeMethods.FindWindowEx(wh.RawPtr, IntPtr.Zero, "Scintilla", null);
+								WriteToNotepadPlusPlus(handle, message);
+								processed = true;
+								return true;
+							}
 						default:
 							return false;
 					}
@@ -149,23 +149,21 @@ namespace DevHelper
 			var dataLength = Encoding.UTF8.GetByteCount(message);
 			_ = NativeMethods.GetWindowThreadProcessId(hwnd, out var remoteProcessId);
 			if (remoteProcessId == 0) return;
-			using (var remoteProcess = Process.GetProcessById(remoteProcessId))
-			{
-				var mem = NativeMethods.VirtualAllocEx(remoteProcess.Handle, IntPtr.Zero, (IntPtr)dataLength, NativeMethods.MEM_COMMIT | NativeMethods.MEM_RESERVE, NativeMethods.PAGE_READWRITE);
-				if (mem == IntPtr.Zero)
-					return;
+			using var remoteProcess = Process.GetProcessById(remoteProcessId);
+			var mem = NativeMethods.VirtualAllocEx(remoteProcess.Handle, IntPtr.Zero, (IntPtr)dataLength, NativeMethods.MEM_COMMIT | NativeMethods.MEM_RESERVE, NativeMethods.PAGE_READWRITE);
+			if (mem == IntPtr.Zero)
+				return;
 
-				try
-				{
-					var data = new byte[dataLength];
-					var idx = Encoding.UTF8.GetBytes(message, 0, message.Length, data, 0);
-					_ = NativeMethods.WriteProcessMemory(remoteProcess.Handle, mem, data, (IntPtr)dataLength, out var bytesWritten);
-					_ = NativeMethods.SendMessage(hwnd, NativeMethods.SCI_ADDTEXT, (IntPtr)dataLength, mem);
-				}
-				finally
-				{
-					_ = NativeMethods.VirtualFreeEx(remoteProcess.Handle, mem, IntPtr.Zero, NativeMethods.MEM_RELEASE);
-				}
+			try
+			{
+				var data = new byte[dataLength];
+				var idx = Encoding.UTF8.GetBytes(message, 0, message.Length, data, 0);
+				_ = NativeMethods.WriteProcessMemory(remoteProcess.Handle, mem, data, (IntPtr)dataLength, out var bytesWritten);
+				_ = NativeMethods.SendMessage(hwnd, NativeMethods.SCI_ADDTEXT, (IntPtr)dataLength, mem);
+			}
+			finally
+			{
+				_ = NativeMethods.VirtualFreeEx(remoteProcess.Handle, mem, IntPtr.Zero, NativeMethods.MEM_RELEASE);
 			}
 		}
 	}

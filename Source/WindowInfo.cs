@@ -15,7 +15,7 @@ namespace DevHelper
 			var windowType = window?.GetType();
 			if (windowType == null) return null;
 
-			ResizeableWindowTypes = ResizeableWindowTypes ?? typeof(EditWindow).Assembly.GetTypes()
+			ResizeableWindowTypes ??= typeof(EditWindow).Assembly.GetTypes()
 					.Where(type => type.IsSubclassOf(typeof(EditWindow))).ToHashSet();
 			if (ResizeableWindowTypes.Contains(windowType) == false) return null;
 
