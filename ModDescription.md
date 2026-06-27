@@ -1,5 +1,3 @@
-# DevHelper
-
 DevHelper is a small RimWorld tool for mod developers.
 
 It removes some friction from testing and debugging by turning on useful dev behavior and reducing repetitive setup.
@@ -13,17 +11,3 @@ What it helps with:
 - keep log output easier to read
 
 It is meant for development sessions, not normal playthroughs.
-
-----
-
-If you are looking for the Steam Workshop versions:
-https://steamcommunity.com/id/brrainz/myworkshopfiles/
-
-For mod support/feedback, visit my Discord:
-https://discord.gg/CYnWvrbNhD
-
-Support me with as little as $1:
-https://patreon.com/pardeike
-
-ENJOY
-/Brrainz
